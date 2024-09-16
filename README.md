@@ -1,210 +1,135 @@
-***readline: 
+Mini E-commerce Cart System (Command-Line Application)
+This project implements a Mini E-commerce Cart System using Node.js, designed to be a command-line application. Users can interact with the system to add items to a cart, apply discounts, view the total price in different currencies, and checkout.
 
-***conversionRates
+Features
+Add items to a cart with specific quantities.
+Remove items from the cart or adjust their quantities.
+View current cart items and total cost.
+Apply dynamic discounts to items.
+Support for multiple currencies (USD, EUR, GBP).
+Checkout to calculate the final price after discounts and currency conversion.
+Project Structure
+The project is built using Object-Oriented Programming (OOP) principles, ensuring that the system is modular and extensible. It consists of the following classes:
 
+1. Product
+This class represents a product that can be added to the cart.
 
+Attributes:
+id (string): Unique identifier for the product.
+name (string): Name of the product.
+price (float): Price of the product in USD.
+category (string): Category of the product (e.g., Electronics, Fashion).
+Why it was created:
+To encapsulate product data and provide a blueprint for creating various products in the system.
+Example:
+javascript
+Copy code
+const product = new Product('P001', 'Laptop', 1000.00, 'Electronics');
+2. CartItem
+This class represents an item in the shopping cart. It holds a reference to the Product and stores the quantity of that product added to the cart.
 
-// Predefined currency conversion rates
-const conversionRates = {
-    USD: 1,
-    EUR: 0.85,
-    GBP: 0.75
-};
+Attributes:
+product (Product): The product object added to the cart.
+quantity (number): The quantity of the product.
+Methods:
+getTotalPrice(): Returns the total price for the product in the cart (price * quantity).
+Why it was created:
+To represent each individual cart entry, including product details and the number of units in the cart. This helps track products and quantities efficiently.
+Example:
+javascript
+Copy code
+const cartItem = new CartItem(product, 2);
+const totalPrice = cartItem.getTotalPrice();  // 2000.00 USD
+3. Cart
+This class manages the shopping cart. It is responsible for adding and removing items, viewing the cart, and calculating the total cost (before and after applying discounts).
 
-***Product Class
-class Product {
-    constructor(id, name, price, category) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.category = category;
-    }
-}
+Attributes:
+items (Array of CartItem): List of all items in the cart.
+Methods:
+addItem(product, quantity): Adds a product to the cart with a specified quantity.
+removeItem(productId, quantity): Removes a product from the cart or reduces its quantity.
+viewCart(): Displays the current items in the cart along with their details (name, quantity, price, total cost).
+checkout(): Applies available discounts and calculates the final total price in USD.
+Why it was created:
+To handle all the operations related to the user's shopping cart, including product addition/removal, viewing the cart contents, and applying discounts at checkout.
+Example:
+javascript
+Copy code
+cart.addItem(product, 1);
+cart.viewCart();
+cart.checkout();
+4. Discount
+This class represents the discount system. It currently supports two types of discounts:
 
-***Cart Item Class
-class CartItem {
-    constructor(product, quantity) {
-        this.product = product;
-        this.quantity = quantity;
-    }
+Buy 1 Get 1 Free for Fashion category items.
+10% Off on Electronics category items.
+Methods:
+listDiscounts(): Lists all available discounts that can be applied at checkout.
+Why it was created:
+To modularly manage the discounts in the system. The discount logic is kept separate from the cart, allowing for easier extension if new discounts are added in the future.
+Example:
+javascript
+Copy code
+Discount.listDiscounts();
+5. CurrencyConverter
+This class handles currency conversion. It supports fixed conversion rates between USD and other currencies (EUR, GBP).
 
-    getTotalPrice() {
-        return this.product.price * this.quantity;
-    }
-}
+Methods:
+convert(amount, currency): Converts the amount from USD to the specified currency.
+Why it was created:
+To allow users to view the total price in different currencies, making the system more flexible for international users.
+Example:
+javascript
+Copy code
+const totalInEUR = CurrencyConverter.convert(1000, 'EUR');  // 850.00 EUR
+Command-Line Interface (CLI)
+The system is designed to be used from the command line. Users can interact with it by typing specific commands to add items, view the cart, apply discounts, and checkout.
 
-***Cart Class
-class Cart {
-    constructor() {
-        this.items = [];
-    }
+Supported Commands:
+add_to_cart <ProductID> <Quantity>: Adds a product to the cart.
 
-    addItem(product, quantity) {
-        const existingItem = this.items.find(item => item.product.id === product.id);
-        if (existingItem) {
-            existingItem.quantity += quantity;
-        } else {
-            this.items.push(new CartItem(product, quantity));
-        }
-        console.log(`Added ${quantity} ${product.name} to the cart.`);
-    }
+bash
+Copy code
+> add_to_cart P001 1
+remove_from_cart <ProductID> <Quantity>: Removes or reduces the quantity of a product in the cart.
 
-    removeItem(productId, quantity) {
-        const index = this.items.findIndex(item => item.product.id === productId);
-        if (index !== -1) {
-            const item = this.items[index];
-            if (item.quantity <= quantity) {
-                this.items.splice(index, 1);
-                console.log(`Removed all ${item.product.name} from the cart.`);
-            } else {
-                item.quantity -= quantity;
-                console.log(`Reduced quantity of ${item.product.name} by ${quantity}.`);
-            }
-        } else {
-            console.log(`Item with ID ${productId} not found in the cart.`);
-        }
-    }
+bash
+Copy code
+> remove_from_cart P001 1
+view_cart: Displays the current cart contents and total price (before discounts).
 
-    viewCart() {
-        if (this.items.length === 0) {
-            console.log('Your cart is empty.');
-            return;
-        }
+bash
+Copy code
+> view_cart
+list_discounts: Lists all available discounts that can be applied.
 
-        console.log('Your Cart:');
-        let totalBeforeDiscount = 0;
-        this.items.forEach(item => {
-            const total = item.getTotalPrice();
-            totalBeforeDiscount += total;
-            console.log(`${item.product.name} - Quantity: ${item.quantity}, Price: ${item.product.price.toFixed(2)} USD, Total: ${total.toFixed(2)} USD`);
-        });
+bash
+Copy code
+> list_discounts
+checkout: Applies available discounts, calculates the total, and asks if the user wants to view the total in a different currency.
 
-        console.log(`Total (before discounts): ${totalBeforeDiscount.toFixed(2)} USD`);
-    }
+bash
+Copy code
+> checkout
+Pre-populated Product Catalog
+The system comes pre-populated with the following products:
 
-    checkout() {
-        let total = 0;
-        let totalDiscount = 0;
-
-        console.log('Applying discounts...');
-        this.items.forEach(item => {
-            let itemTotal = item.getTotalPrice();
-            if (item.product.category === 'Fashion' && item.quantity >= 2) {
-                const freeItems = Math.floor(item.quantity / 2);
-                const discount = freeItems * item.product.price;
-                totalDiscount += discount;
-                console.log(`Buy 1 Get 1 Free on ${item.product.name} applied. Discount: ${discount.toFixed(2)} USD`);
-            }
-            if (item.product.category === 'Electronics') {
-                const discount = itemTotal * 0.1;
-                totalDiscount += discount;
-                console.log(`10% Off on ${item.product.name} applied. Discount: ${discount.toFixed(2)} USD`);
-            }
-            total += itemTotal;
-        });
-
-        total -= totalDiscount;
-        console.log(`Final Total in USD: ${total.toFixed(2)} USD`);
-
-        return total;
-    }
-}
-
-***Discount Class (to display available discounts)
-class Discount {
-    static listDiscounts() {
-        console.log('Available Discounts:');
-        console.log('1. Buy 1 Get 1 Free on Fashion items');
-        console.log('2. 10% Off on Electronics');
-    }
-}
-
-***Currency Converter Class
-class CurrencyConverter {
-    static convert(amount, currency) {
-        if (!conversionRates[currency]) {
-            console.log('Unsupported currency.');
-            return amount;
-        }
-
-        return amount * conversionRates[currency];
-    }
-}
-
-***Product Catalog
-const productCatalog = [
-    new Product('P001', 'Laptop', 1000.00, 'Electronics'),
-    new Product('P002', 'Phone', 500.00, 'Electronics'),
-    new Product('P003', 'T-Shirt', 20.00, 'Fashion')
-];
-
-***Create Cart Instance
-const cart = new Cart();
-
-***Command-Line Interface (CLI) Setup
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-
-***Commands to help user
-const menu = `
-Commands:
-1. add_to_cart <ProductID> <Quantity>
-2. remove_from_cart <ProductID> <Quantity>
-3. view_cart
-4. list_discounts
-5. checkout
-6. exit
-Enter your command: `;
-
-
-***HandleInput
-function handleCommand(command) {
-    const [action, productId, quantity] = command.split(' ');
-
-    switch (action) {
-        case 'add_to_cart':
-            const productToAdd = productCatalog.find(p => p.id === productId);
-            if (productToAdd) {
-                cart.addItem(productToAdd, parseInt(quantity));
-            } else {
-                console.log(`Product with ID ${productId} not found.`);
-            }
-            break;
-        case 'remove_from_cart':
-            cart.removeItem(productId, parseInt(quantity));
-            break;
-        case 'view_cart':
-            cart.viewCart();
-            break;
-        case 'list_discounts':
-            Discount.listDiscounts();
-            break;
-        case 'checkout':
-            const total = cart.checkout();
-            rl.question('Would you like to view it in a different currency? (yes/no): ', answer => {
-                if (answer.toLowerCase() === 'yes') {
-                    rl.question('Enter currency (USD, EUR, GBP): ', currency => {
-                        const convertedTotal = CurrencyConverter.convert(total, currency);
-                        console.log(`Final Total in ${currency}: ${convertedTotal.toFixed(2)} ${currency}`);
-                        rl.prompt();
-                    });
-                } else {
-                    rl.prompt();
-                }
-            });
-            break;
-        case 'exit':
-            rl.close();
-            break;
-        default:
-            console.log('Invalid command.');
-            break;
-    }
-}
-
-console.log(menu);
-rl.prompt();
-rl.on('line', handleCommand);
+Laptop (Electronics): 1000.00 USD
+Phone (Electronics): 500.00 USD
+T-Shirt (Fashion): 20.00 USD
+How to Run
+Clone this repository.
+Navigate to the project directory.
+Install dependencies (if needed):
+bash
+Copy code
+npm install
+Run the application:
+bash
+Copy code
+node cartSystem.js
+Use the command-line to interact with the system using the supported commands.
+Future Extensions
+Additional Discounts: Easily add more discounts by extending the Discount class.
+Product Categories: Support more product categories as needed.
+Currency Support: Add more currencies and conversion rates.
