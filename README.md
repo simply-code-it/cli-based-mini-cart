@@ -2,7 +2,7 @@
 
 This project implements a Mini E-commerce Cart System using Node.js, designed to be a command-line application. Users can interact with the system to add items to a cart, apply discounts, view the total price in different currencies, and checkout.
 
-*Features
+* Features
 
 Add items to a cart with specific quantities.
 
