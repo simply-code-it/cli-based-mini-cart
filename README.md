@@ -57,6 +57,8 @@ The system is designed to be used from the command line. Users can interact with
 * view_cart: Displays the current cart contents and total price (before discounts).
 * list_discounts: Lists all available discounts that can be applied.
 * checkout: Applies available discounts, calculates the total, and asks if the user wants to view the total in a different currency.
+* exit: Will close the terminal(application).
+* help: List all the commands for the user.
 
 
 # Pre-populated Product Catalog
