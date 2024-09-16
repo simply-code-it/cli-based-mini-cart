@@ -1,41 +1,25 @@
-* Mini E-commerce Cart System (Command-Line Application)
+# Mini E-commerce Cart System (Command-Line Application)
 
 This project implements a Mini E-commerce Cart System using Node.js, designed to be a command-line application. Users can interact with the system to add items to a cart, apply discounts, view the total price in different currencies, and checkout.
 
-* Features
-
+# Features
 Add items to a cart with specific quantities.
-
 Remove items from the cart or adjust their quantities.
-
 View current cart items and total cost.
-
 Apply dynamic discounts to items.
-
 Support for multiple currencies (USD, EUR, GBP).
-
 Checkout to calculate the final price after discounts and currency conversion.
 
-* Project Structure
 
-The project is built using Object-Oriented Programming (OOP) principles, ensuring that the system is modular and extensible. It consists of the following classes:
-
-* 1. Product
-
+# 1. Product
 This class represents a product that can be added to the cart.
+## Attributes:
+* id (string): Unique identifier for the product.
+* name (string): Name of the product.
+* price (float): Price of the product in USD.
+* category (string): Category of the product (e.g., Electronics, Fashion).
 
-Attributes:
-id (string): Unique identifier for the product.
-name (string): Name of the product.
-price (float): Price of the product in USD.
-category (string): Category of the product (e.g., Electronics, Fashion).
-Why it was created:
-To encapsulate product data and provide a blueprint for creating various products in the system.
-Example:
-javascript
-Copy code
-const product = new Product('P001', 'Laptop', 1000.00, 'Electronics');
-2. CartItem
+# 2. CartItem
 This class represents an item in the shopping cart. It holds a reference to the Product and stores the quantity of that product added to the cart.
 
 Attributes:
