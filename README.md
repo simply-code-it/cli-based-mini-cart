@@ -3,12 +3,12 @@
 This project implements a Mini E-commerce Cart System using Node.js, designed to be a command-line application. Users can interact with the system to add items to a cart, apply discounts, view the total price in different currencies, and checkout.
 
 # Features
-Add items to a cart with specific quantities.
-Remove items from the cart or adjust their quantities.
-View current cart items and total cost.
-Apply dynamic discounts to items.
-Support for multiple currencies (USD, EUR, GBP).
-Checkout to calculate the final price after discounts and currency conversion.
+* Add items to a cart with specific quantities.
+* Remove items from the cart or adjust their quantities.
+* View current cart items and total cost.
+* Apply dynamic discounts to items.
+* Support for multiple currencies (USD, EUR, GBP).
+* Checkout to calculate the final price after discounts and currency conversion.
 
 
 # 1. Product
