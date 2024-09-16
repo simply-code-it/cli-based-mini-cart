@@ -1,6 +1,6 @@
 const readline = require("readline");
 
-// Predefined currency conversion rates
+// Pre-defined currency conversion rates
 const conversionRates = {
   USD: 1,
   EUR: 0.85,
@@ -181,7 +181,7 @@ function handleInput(command) {
       if (productToAdd) {
         cart.addItem(productToAdd, parseInt(quantity));
       } else {
-        console.log(`Product with ID ${productId} not found.`);
+        console.log(`Product with ID ${productId} is not found.`);
       }
       break;
     case "remove_from_cart":
